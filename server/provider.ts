@@ -7,7 +7,7 @@ export function createDeepSeekHarnessProvider(): ProviderRegistration {
     id: "deepseek-harness",
     label: "DeepSeek Harness",
     description:
-      "DeepSeek Harness coding agent over ACP (dsh --profile acp) supporting modern V3/V4 models",
+      "DeepSeek Harness coding agent over ACP (dsh --profile acp)",
     icon: "icon.svg",
     command: ["dsh", "--profile", "acp"],
   });
