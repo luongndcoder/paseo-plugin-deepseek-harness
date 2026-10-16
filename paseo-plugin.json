@@ -2,6 +2,6 @@
   "id": "deepseek-harness-provider",
   "description": "DeepSeek Harness coding agent over ACP (dsh --profile acp).",
   "requirements": {
-    "paseo": ">=0.11.0"
+    "paseo": ">=0.10.0"
   }
 }

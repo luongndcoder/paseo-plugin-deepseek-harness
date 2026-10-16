@@ -4,7 +4,7 @@ Plugin [Paseo](https://paseo.sh) thêm provider **DeepSeek Harness** (`dsh --pro
 
 ## Cài đặt
 
-Yêu cầu Paseo `>= 0.11.0` và CLI `dsh` trên PATH (`npm i -g @deepseek-ai/dsh`).
+Yêu cầu Paseo `>= 0.10.0` và CLI `dsh` trên PATH (`npm i -g @deepseek-ai/dsh`).
 
 ```bash
 paseo plugin install github:luongndcoder/paseo-plugin-deepseek-harness --ref main
