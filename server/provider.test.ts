@@ -1,6 +1,13 @@
 import { describe, expect, it, vi } from "vitest";
+import { execCommand } from "@getpaseo/plugin/server";
 import { createDeepSeekHarnessProvider } from "./provider.js";
-import * as serverModule from "@getpaseo/plugin/server";
+
+vi.mock("@getpaseo/plugin/server", async (importOriginal) => ({
+  ...(await importOriginal<typeof import("@getpaseo/plugin/server")>()),
+  execCommand: vi.fn(),
+}));
+
+const execCommandMock = vi.mocked(execCommand);
 
 describe("createDeepSeekHarnessProvider", () => {
   it("registers with id deepseek-harness and correct command", () => {
@@ -24,10 +31,10 @@ describe("createDeepSeekHarnessProvider", () => {
   });
 
   it("reports available when dsh -V returns version", async () => {
-    const spy = vi.spyOn(serverModule, "execCommand").mockResolvedValue({
+    execCommandMock.mockResolvedValue({
       stdout: "0.2.0-rc.2\n",
       stderr: "",
-    } as Awaited<ReturnType<typeof serverModule.execCommand>>);
+    } as Awaited<ReturnType<typeof execCommand>>);
 
     const provider = createDeepSeekHarnessProvider();
     const result = await provider.status?.({
@@ -39,16 +46,16 @@ describe("createDeepSeekHarnessProvider", () => {
     });
 
     expect(result).toEqual({ available: true });
-    expect(spy).toHaveBeenCalledWith(
+    expect(execCommandMock).toHaveBeenCalledWith(
       "dsh",
       ["--profile", "acp", "-V"],
       expect.objectContaining({ timeout: 4000 }),
     );
-    spy.mockRestore();
+    execCommandMock.mockReset();
   });
 
   it("reports unavailable when probe fails", async () => {
-    const spy = vi.spyOn(serverModule, "execCommand").mockRejectedValue(new Error("ENOENT"));
+    execCommandMock.mockRejectedValue(new Error("ENOENT"));
 
     const provider = createDeepSeekHarnessProvider();
     const result = await provider.status?.({
@@ -63,6 +70,6 @@ describe("createDeepSeekHarnessProvider", () => {
       available: false,
       diagnostic: "ENOENT",
     });
-    spy.mockRestore();
+    execCommandMock.mockReset();
   });
 });
